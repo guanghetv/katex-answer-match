@@ -4,6 +4,15 @@
 
 npm install katex-answer-match
 
+```javascript
+/**
+ * judge two string match.
+ * @param {string} origin - 课程内容.
+ * @param {string} dest - 用户输入.
+ * @returns {boolean} - 是否匹配
+ */
+```
+
 ### 前端
 
 ```javascript
