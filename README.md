@@ -1,5 +1,7 @@
 # katex-answer-match
 
+[![Build Status](https://travis-ci.org/guanghetv/katex-answer-match.svg?branch=master)](https://travis-ci.org/guanghetv/katex-answer-match)
+
 npm install katex-answer-match
 
 ### 前端
