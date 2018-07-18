@@ -2,43 +2,158 @@ const chai = require('chai');
 const expect = chai.expect;
 
 const judge = require('./').katex_answer_match;
-
+const blank = [' abc','　abc','\tabc','a\tb\tc',' a\tb   c    ','abc\t'];
 describe('', function(){
 
-    it('normal',function() {
-        expect(judge('a', 'b')).to.be.false;
-        expect(judge('aaa', 'bbb')).to.be.false;
-        expect(judge('aaa', 'aaa')).to.be.true;
+    it(`返回boolean---兼容旧数据`,function() {
+        expect(judge(
+            ['a','b'],
+            {
+                'blanks':['a','b'],
+            },
+        )).to.be.true
+    });
+    it(`返回seq---兼容旧数据--[1,1]`,function() {
+        expect(judge(
+            ['a','b'],
+            {
+                'blanks':['a','b'],
+                isSeq: true
+            },
+
+        ).toString().toString()).to.equal('1,1')
+    });
+    it(`返回seq---兼容旧数据--[0,1,0]`,function() {
+        expect(judge(
+            ['a','b','k'],
+            {
+                'blanks':['a1','b','a'],
+                isSeq: true
+            },
+
+        ).toString().toString()).to.equal('0,1,0')
     });
 
-    it('left',function() {
-        expect(judge(' abc', 'abc')).to.be.true;
-        expect(judge('abc', '\tabc')).to.be.true; //制表符
-        expect(judge('　abc', ' abc')).to.be.true; //全角空格
-        expect(judge('  abc', '  abc')).to.be.true;
-        expect(judge('  abc', 'abd')).to.be.false;
+    it('兼容旧数据--全角空格／制表符/空格',function() {
+        expect(judge(
+            blank,
+            {
+                'blanks':blank
+            }
+        )).to.be.true;
     });
+    it('支持多答案',function() {
+        expect(judge(
+            [' abc','b'],
+            {
+                'blanks':['a','b'],
+                'extendedBlanks':[
+                    blank,
+                    ['b']
+                ],
+                'groups': null
+            }
+        )).to.be.true;
+    });
+    var answersForSpace = function(item, index){
+        it(`${index}支持多答案--全角空格／制表符/空格`,function() {
+            expect(judge(
+                [item,'b'],
+                {
+                    'extendedBlanks':[
+                        ['abc'],
+                        ['b']
+                    ],
+                    'groups': null
+                }
+            )).to.be.true;
+        });
+    }
+    blank.forEach( (val,index) => {
+        answersForSpace(val, index)
+    })
 
-    it('right',function() {
-        expect(judge('abc ', 'abc')).to.be.true;
-        expect(judge('abc', 'abc\t')).to.be.true; //制表符
-        expect(judge('abc ', 'abc　')).to.be.true; //全角空格
-        expect(judge('abc  ', 'abc ')).to.be.true;
-        expect(judge('abc  ', 'abd')).to.be.false;
+    it('支持乱序',function() {
+        expect(judge(
+            ['b','abc'],
+            {
+                'extendedBlanks':[
+                    ['abc'],
+                    ['b']
+                ],
+                'groups': [
+                    [0,1]
+                ]
+            }
+        )).to.be.true;
     });
-
-    it('middle',function() {
-        expect(judge('a bc', 'abc')).to.be.true;
-        expect(judge('a\tb\tc', 'abc')).to.be.true; //制表符
-        expect(judge('abc', 'a　bc')).to.be.true; //全角空格
-        expect(judge('abc', 'a b c')).to.be.true;
+    var orderForSpace = function(item, index){
+        it(`${index}支持乱序--全角空格／制表符/空格`,function() {
+            expect(judge(
+                ['b',item],
+                {
+                    'extendedBlanks':[
+                        ['abc'],
+                        ['b']
+                    ],
+                    'groups': [
+                        [0,1]
+                    ]
+                }
+            )).to.be.true;
+        });
+    }
+    blank.forEach( (val,index) => {
+        orderForSpace(val, index)
+    })
+    it('支持多答案&乱序true',function() {
+        expect(judge(
+            ['abc','b','f'],
+            {
+                'extendedBlanks':[
+                    blank,
+                    ['b'],
+                    ['f']
+                ],
+                'groups': [
+                    [1,2]
+                ]
+            }
+        )).to.be.true;
     });
-
-    it('mixed',function() {
-        expect(judge(' a b c ', 'abc')).to.be.true;
-        expect(judge(' a\tb   c    ', 'abc')).to.be.true; //制表符
-        expect(judge('abc', ' a　b c ')).to.be.true; //全角空格
-        expect(judge('abc', ' a  b   c   ')).to.be.true;
-        expect(judge(' a b c ', ' a  b   c   ')).to.be.true;
+    it('支持多答案&乱序false',function() {
+        expect(judge(
+            ['b','abc','f'],
+            {
+                'extendedBlanks':[
+                    blank,
+                    ['b'],
+                    ['f']
+                ],
+                'groups': [
+                    [1,2]
+                ]
+            }
+        )).to.be.false;
     });
+    var answersOrderForSpace = function(item, index){
+        it(`${index}支持多答案&乱序true--全角空格／制表符/空格`,function() {
+            expect(judge(
+                [item,'f','b'],
+                {
+                    'extendedBlanks':[
+                        ['abc'],
+                        ['b'],
+                        ['f']
+                    ],
+                    'groups': [
+                        [1,2]
+                    ]
+                }
+            )).to.be.true;
+        });
+    }
+    blank.forEach( (val,index) => {
+        answersOrderForSpace(val, index)
+    })
 });
