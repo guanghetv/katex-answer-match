@@ -2,6 +2,11 @@
     'use strict';
     var katex_answer_match = function(userAnswers, {extendedBlanks = [], groups = [], blanks = [], isSeq = false} = {} ){
 
+        !extendedBlanks && ( extendedBlanks = [] );
+        !groups && ( groups = [] );
+        !blanks && ( blanks = [] );
+        !userAnswers && ( userAnswers = [] );
+
         if (extendedBlanks.length === 0 && blanks.length === 0) {
             throw Error('extendedBlanks blanks必须传入其中一个');
         }
@@ -10,8 +15,6 @@
             throw Error('userAnswers 必传');
         }
 
-        let params = [extendedBlanks, groups, blanks, userAnswers];
-        params = params.map(param => param === undefined || param === null ? [] : param)
 
         // 结果序列
         let rightSeq = extendedBlanks.length ? extendedBlanks.map(x => 0) : blanks.map(x => 0);
