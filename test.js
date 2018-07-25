@@ -10,7 +10,7 @@ describe('', function(){
             ['a','b'],
             {
                 'blanks':['a','b'],
-            },
+            }
         )).to.be.true
     });
     it(`返回seq---兼容旧数据--[1,1]`,function() {
@@ -19,7 +19,7 @@ describe('', function(){
             {
                 'blanks':['a','b'],
                 isSeq: true
-            },
+            }
 
         ).toString().toString()).to.equal('1,1')
     });
@@ -29,7 +29,7 @@ describe('', function(){
             {
                 'blanks':['a1','b','a'],
                 isSeq: true
-            },
+            }
 
         ).toString().toString()).to.equal('0,1,0')
     });

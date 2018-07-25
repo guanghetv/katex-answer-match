@@ -56,7 +56,6 @@
                     }
                     return group.includes(userIndex);
                 });
-
             if (extendedBlanks[userIndex].includes(userAnswer)) { // 直接匹配答案
                 rightSeq[userIndex] = 1
             } else if (itUsrBlankDisOrder) { // 支持乱序 匹配所有的答案
