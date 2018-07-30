@@ -8,11 +8,11 @@
         !userAnswers && ( userAnswers = [] );
 
         if (extendedBlanks.length === 0 && blanks.length === 0) {
-            throw Error('extendedBlanks blanks必须传入其中一个');
+            console.warn('extendedBlanks blanks必须传入其中一个');
         }
 
         if (userAnswers.length === 0) {
-            throw Error('userAnswers 必传');
+            console.warn('userAnswers 必传');
         }
 
 
