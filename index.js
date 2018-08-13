@@ -33,7 +33,9 @@
         extendedBlanks = extendedBlanks.map((extendedBlank)=>{
             return extendedBlank.map(x=>{
                 // 类型要求
-                if (typeof x !== 'string') {
+                if(typeof x === 'undefined'){
+                    x = '';
+                } else if (typeof x !== 'string'){
                     throw Error('params need string');
                 }
                 return x.replace(/\s+/g, '')
@@ -42,12 +44,14 @@
 
         // 遍历用户答案
         userAnswers.forEach((userAnswer, userIndex) => {
-            // 去除字符串的前后中间的空格，防止cb录入数据错误
-            userAnswer = userAnswer.replace(/\s+/g, '');
             // 类型要求
-            if (typeof userAnswer !== 'string') {
+            if(typeof userAnswer === 'undefined'){
+                userAnswer = '';
+            }else if(typeof userAnswer !== 'string'){
                 throw Error('params need string');
             }
+            // 去除字符串的前后中间的空格，防止cb录入数据错误
+            userAnswer = userAnswer.replace(/\s+/g, '');
             // 是否支持乱序
             let groupSameIndex = -1;
             let itUsrBlankDisOrder = groups && groups.some((group, groupIndex) => {
@@ -56,7 +60,7 @@
                     }
                     return group.includes(userIndex);
                 });
-            if (extendedBlanks[userIndex].includes(userAnswer)) { // 直接匹配答案
+            if (extendedBlanks[userIndex] && extendedBlanks[userIndex].includes(userAnswer)) { // 直接匹配答案
                 rightSeq[userIndex] = 1
             } else if (itUsrBlankDisOrder) { // 支持乱序 匹配所有的答案
                 let reextendedBlanks = [];
