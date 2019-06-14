@@ -3,7 +3,7 @@ const expect = chai.expect;
 
 const judge = require('./').katex_answer_match;
 const blank = [' abc','　abc','\tabc','a\tb\tc',' a\tb   c    ','abc\t'];
-describe('', function(){
+describe('1.x版本测试用例', function(){
 
     it(`返回boolean---兼容旧数据`,function() {
         expect(judge(
@@ -157,3 +157,56 @@ describe('', function(){
         answersOrderForSpace(val, index)
     })
 });
+
+describe('支持多选题, 单选题, exam（改边选择题数据结构。\n  原来单选题答案"xxx",现在["xxx"],多选题["xxx","yyy"]）', function () {
+  it('多选题', function () {
+    expect(judge(
+        [
+          ["一个角的余角一定是钝角", "锐角的余角一定是锐角"]
+        ],
+        {
+          extendedBlanks: [
+            [
+              ["一个角的余角一定是钝角", "锐角的余角一定是锐角"]
+            ]
+          ],
+        }
+    )).to.be.true
+  });
+  it('多选题 漏选', function () {
+    expect(judge(
+      [
+        ["一个角的余角一定是钝角"]
+      ],
+      {
+        extendedBlanks: [
+          [
+            ["一个角的余角一定是钝角", "锐角的余角一定是锐角"]
+          ]
+        ],
+      }
+    )).to.be.false
+  });
+  it('单选题', function () {
+    expect(judge(
+      [
+        ["$170$"]
+      ], {
+        extendedBlanks: [
+          ["$170$"]
+        ],
+      }
+    )).to.be.true
+  });
+  it('exam题', function () {
+    expect(judge(
+      [
+        ["我会做"]
+      ], {
+        extendedBlanks: [
+          ["我会做"]
+        ],
+      }
+    )).to.be.true
+  });
+})
