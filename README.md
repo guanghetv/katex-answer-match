@@ -9,13 +9,15 @@ npm install katex-answer-match
  * 判断用户做题结果（Boolean）
  * katex_answer_match
  * @date 2018-07-05
+ * modifyDate 2019-07-10
  * @description
  * 入参
  * extendedBlanks: 单空有多种答案，即等值情况  二维数组
  * groups: 多空之间支持乱序 二维数组
  * blanks 问题对应的正确答案（旧的CB数据，即字段blanks） 一维数组
  * userAnswers: 用户输入的答案 一维数组(必须传)
- * isSeq: boolean。true：结果返回由01构成的一维数组，表示每个空的正误，false:结果返回布尔值，表示该题的正误
+ * isSeq: boolean。true：结果返回由01构成的一维数组，表示每个空的正误，false:结果返回布尔值，表示该题的正误.
+ * type: number, 目前只有一个枚举,1  该字段表示计算userAnswers和blanks之间是否相等的算法,1代表差集算法, 目前仅多选题用到此算法
  * 参数传入规则：1.仅兼容旧数据：userAnswers & blanks；2. 支持多答案乱序 userAnswers & extendedBlanks & groups （blanks可不传）
  *
  * @returns {boolean | arr} - 默认返回布尔值（isSeq：false）。
@@ -40,6 +42,23 @@ judge.katex_answer_match(
         isSeq: true
     }
 );
+// type = 1 差集算法, 以下示例返回[1,1,0] 表示每个blanks的元素在userAnswers中是否存在
+judge(
+    ['a', 'b'],
+    {
+        blanks: ['b', 'a', 'c'],
+        isSeq: true
+    },
+    1
+)
+// type = 1 差集算法,以下示例返回了false, 表示没有完全匹配
+judge(
+    ['a', 'b'],
+    {
+        blanks: ['b', 'a', 'c']
+    },
+    1
+)
 ```
 
 
@@ -60,5 +79,22 @@ judge.katex_answer_match(
         blanks:['1/2', 'red'],
         isSeq: true
     }
+);
+// type = 1 差集算法, 以下示例返回[1,1,0] 表示每个blanks的元素在userAnswers中是否存在
+judge(
+    ['a', 'b'],
+    {
+        blanks: ['b', 'a', 'c'],
+        isSeq: true
+    },
+    1
+);
+// type = 1 差集算法,以下示例返回了false, 表示没有完全匹配
+judge(
+    ['a', 'b'],
+    {
+        blanks: ['b', 'a', 'c']
+    },
+    1
 );
 ```

@@ -222,4 +222,13 @@ describe('', function(){
             1
         )).to.be.true
     })
+    it('8支持多选题, 验证漏选+答案乱序', function () {
+        expect(judge(
+            ['a', 'b'],
+            {
+                blanks: ['b', 'a', 'c']
+            },
+            1
+        )).to.be.false
+    })
 });
