@@ -156,4 +156,70 @@ describe('', function(){
     blank.forEach( (val,index) => {
         answersOrderForSpace(val, index)
     })
+    it('1支持多选题, 验证答案乱序', function () {
+        expect(judge(
+            ["一个角的余角一定是钝角", "锐角的余角一定是锐角"],
+            {
+                blanks: ["一个角的余角一定是钝角", "锐角的余角一定是锐角"]
+            },
+            1
+        )).to.be.true
+    })
+    it('2支持多选题, 验证答案正序', function () {
+        expect(judge(
+            ['a', 'b'],
+            {
+                blanks: ['a', 'b']
+            },
+            1
+        )).to.be.true
+    })
+    it('3支持多选题, 验证漏选+答案乱序', function () {
+        expect(judge(
+            ['a', 'b'],
+            {
+                blanks: ['b', 'a', 'c'],
+                isSeq: true
+            },
+            1
+        ).toString().toString()).to.equal('1,1,0')
+    })
+    it('4支持多选题, 验证漏选+答案正序', function () {
+        expect(judge(
+            ['a', 'b'],
+            {
+                blanks: ['a', 'b', 'c'],
+                isSeq: true
+            },
+            1
+        ).toString().toString()).to.equal('1,1,0')
+    })
+    it('5支持多选题, 验证漏选超过一个', function () {
+        expect(judge(
+            ['b'],
+            {
+                blanks: ['a', 'b', 'c'],
+                isSeq: true
+            },
+            1
+        ).toString().toString()).to.equal('0,1,0')
+    })
+    it('6支持多选题, 验证答案为空', function () {
+        expect(judge(
+            [],
+            {
+                blanks: ['a', 'b', 'c']
+            },
+            1
+        )).to.be.false
+    })
+    it('7支持多选题, 验证空格', function () {
+        expect(judge(
+            ['a ', 'b', 'c'],
+            {
+                blanks: ['a', 'b', ' c']
+            },
+            1
+        )).to.be.true
+    })
 });
