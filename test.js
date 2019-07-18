@@ -231,4 +231,23 @@ describe('', function(){
             1
         )).to.be.false
     })
+    it('9支持多选题, 验证选多了', function () {
+        expect(judge(
+            ['a', 'b', 'c', 'd'],
+            {
+                blanks: ['b', 'a', 'c']
+            },
+            1
+        )).to.be.false
+    })
+    it('10支持多选题, 验证选多了', function () {
+        expect(judge(
+            ['a', 'b', 'c', 'd'],
+            {
+                blanks: ['b', 'a', 'c'],
+                isSeq: true
+            },
+            1
+        ).toString().toString()).to.equal('1,1,1')
+    })
 });

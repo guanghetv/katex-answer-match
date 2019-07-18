@@ -101,7 +101,11 @@
             rightSeq[index] = isCorrect ? 1 : 0
             return isCorrect
         })
-        return isSeq ? rightSeq : userCorrectAnswers.length === correctAnswers.length
+        let isCorrect = false
+        if (userAnswers.length === correctAnswers.length && userCorrectAnswers.length === correctAnswers.length) {
+            isCorrect = true
+        }
+        return isSeq ? rightSeq : isCorrect
     }
     this.katex_answer_match = katex_answer_match
 }.call(this))
